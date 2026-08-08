@@ -1,7 +1,7 @@
 {
   "name": "keenlin-plugins",
   "interface": {
-    "displayName": "Keen Lin's Plugins",
+    "displayName": "Keen Lin's Plugins"
   },
   "plugins": [
     {
