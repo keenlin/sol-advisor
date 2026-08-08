@@ -1,6 +1,6 @@
 ---
 name: orchestration
-description: "Codex-native architect orchestration: inherit the parent chat model, delegate implementation to the pinned GPT-5.6 Terra / High custom agent, require a fresh GPT-5.6 Sol / High review, and keep all verification and acceptance in the primary session."
+description: "Codex-native architect orchestration: inherit the parent chat model, delegate implementation to the pinned opencode-go/deepseek-v4-flash custom agent, require a fresh GPT-5.6 Sol / High review, and keep all verification and acceptance in the primary session."
 ---
 
 # Sol Advisor Orchestration
@@ -8,7 +8,7 @@ description: "Codex-native architect orchestration: inherit the parent chat mode
 Act as the architect. Own the user's intent, architecture, decomposition, complete
 task specification, parent verification, and final acceptance. There is exactly one
 delegated lane: the native Codex subagent lane. It delegates implementation to
-`sol_advisor_terra_implementer` (GPT-5.6 Terra / high) and requires a fresh verdict
+`sol_advisor_implementer` (opencode-go/deepseek-v4-flash / high) and requires a fresh verdict
 from `sol_advisor_sol_reviewer` (GPT-5.6 Sol / high, requested read-only) before
 completion. There is no setup interview, no fallback role, and no fallback model.
 
@@ -23,14 +23,19 @@ native delegation in a session.
 
 The two role files are user-owned Codex custom-agent TOML files. The plugin bundle
 cannot register them; Codex discovers custom agents only from `~/.codex/agents/`
-(user scope) or `.codex/agents/` (project scope). Install them once:
+(user scope) or `.codex/agents/` (project scope). Install them once with the shipped
+installer, resolved relative to this SKILL.md:
 
 ~~~sh
-plugin_dir=<directory-containing-this-plugin>
-mkdir -p ~/.codex/agents
-cp "$plugin_dir"/agents/sol-advisor-terra-implementer.toml ~/.codex/agents/
-cp "$plugin_dir"/agents/sol-advisor-sol-reviewer.toml ~/.codex/agents/
+skill_dir=<directory-containing-this-SKILL.md>
+installer="$skill_dir/../../scripts/install-agents.sh"
+sh "$installer"
 ~~~
+
+The installer copies the exact current templates, migrates known legacy files
+(superseded Terra name and retired Luna companion), and never overwrites or removes
+a modified, nonregular, or symlinked destination. To target a project-scope
+`.codex/agents` directory instead, pass `--target-dir .codex/agents`.
 
 Then start a fresh Codex task so native discovery sees the profiles. Installing or
 updating the plugin does not re-register them.
@@ -40,23 +45,25 @@ updating the plugin does not re-register them.
 Before every native delegation, complete steps 1-2. After spawning a native lane,
 complete steps 3-4 before accepting its result:
 
-1. Verify the installed files are byte-exact against the shipped templates:
+1. Run the shipped installer's non-mutating exactness check, resolved relative to
+   this SKILL.md:
 
    ~~~sh
-   shasum -a 256 ~/.codex/agents/sol-advisor-terra-implementer.toml \
-     ~/.codex/agents/sol-advisor-sol-reviewer.toml
-   shasum -a 256 <plugin_dir>/agents/sol-advisor-terra-implementer.toml \
-     <plugin_dir>/agents/sol-advisor-sol-reviewer.toml
+   skill_dir=<directory-containing-this-SKILL.md>
+   installer="$skill_dir/../../scripts/install-agents.sh"
+   sh "$installer" --check
    ~~~
 
-   The two pairs must match exactly. A missing, modified, or symlinked file stops
-   that lane: tell the user to reinstall the exact templates and start a fresh task.
-   Never work around failure with another agent, model, or effort.
+   It must exit zero: the installed Implementer and Sol files match the shipped
+   templates byte-exact and no legacy Terra or Luna file remains. A missing,
+   modified, or symlinked file stops that lane: tell the user to reinstall the exact
+   templates with `sh "$installer"` and start a fresh task. Never work around failure
+   with another agent, model, or effort.
 
 2. Inspect the native spawn tool's available `agent_type` entries. Both exact names
    must be exposed:
 
-   - `sol_advisor_terra_implementer`
+   - `sol_advisor_implementer`
    - `sol_advisor_sol_reviewer`
 
    If either is missing, tell the user to install/check the files, start a fresh
@@ -78,7 +85,8 @@ complete steps 3-4 before accepting its result:
 
    The helper's allowlisted output is the authoritative local fallback for omitted
    model and effort. If public and local values both exist, they must agree. Accepted
-   values are Terra / high for implementation and Sol / high for review. Missing,
+   values are opencode-go/deepseek-v4-flash / high for implementation and Sol / high
+   for review. Missing,
    inconsistent, unavailable, or unobservable routing stops that lane.
 
 4. For every Sol review, capture the observed sandbox policy type and permission
@@ -104,7 +112,7 @@ the primary session when the delegated lane can do it. If the native result is w
 correct the specification and delegate the fix. Do not silently repair a failed child
 patch or spawn a replacement merely to avoid an unresolved correction.
 
-## Native implementation through Terra / High
+## Native implementation through opencode-go/deepseek-v4-flash / High
 
 Use the same role for routine features, mechanical edits, difficult debugging,
 security-sensitive work, non-trivial algorithms, and broad refactors. There is no
@@ -113,11 +121,12 @@ second implementation or fallback lane.
 Spawn exactly:
 
 ~~~text
-agent_type: sol_advisor_terra_implementer
+agent_type: sol_advisor_implementer
 fork_turns: none
 ~~~
 
-The installed role pins GPT-5.6 Terra at high reasoning. Omit per-spawn model and
+The installed role pins opencode-go/deepseek-v4-flash at high reasoning. Omit
+per-spawn model and
 reasoning fields. Confirm role, model, and effort using the public-details-first
 procedure before accepting work.
 
@@ -139,7 +148,7 @@ Treat worker reports as claims. Before acceptance:
 2. Confirm only in-scope files changed.
 3. Rerun the specification's verification commands in the primary session.
 4. Compare the evidence with the objective, interfaces, and constraints.
-5. Delegate corrections through Terra and re-review its updated evidence.
+5. Delegate corrections through the implementer and re-review its updated evidence.
 
 ## Consult fresh Sol at commitment boundaries
 

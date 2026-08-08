@@ -1,7 +1,7 @@
 {
   "name": "sol-advisor",
   "version": "0.6.0",
-  "description": "Codex-native architect orchestration with GPT-5.6 Terra / High implementation, a fresh GPT-5.6 Sol / High review, and parent-owned verification and acceptance.",
+  "description": "Codex-native architect orchestration with opencode-go/deepseek-v4-flash / High implementation, a fresh GPT-5.6 Sol / High review, and parent-owned verification and acceptance.",
   "author": {
     "name": "Daniel McAteer",
     "url": "https://github.com/DannyMac180"
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Sol Advisor",
-    "shortDescription": "Delegate implementation to Terra / High and require a fresh Sol / High review.",
-    "longDescription": "Sol Advisor runs in the parent Codex chat as the architect. It delegates implementation to the pinned GPT-5.6 Terra / High custom agent and requires a fresh GPT-5.6 Sol / High review before completion. The parent owns architecture, the complete five-part specification, diff verification, correction loops, and acceptance. The two custom-agent TOML files must be copied into ~/.codex/agents/ once; Codex discovers them only there.",
+    "shortDescription": "Delegate implementation to opencode-go/deepseek-v4-flash / High and require a fresh Sol / High review.",
+    "longDescription": "Sol Advisor runs in the parent Codex chat as the architect. It delegates implementation to the pinned opencode-go/deepseek-v4-flash / High custom agent and requires a fresh GPT-5.6 Sol / High review before completion. The parent owns architecture, the complete five-part specification, diff verification, correction loops, and acceptance. The two custom-agent TOML files must be copied into ~/.codex/agents/ once; Codex discovers them only there.",
     "developerName": "Daniel McAteer",
     "category": "Productivity",
     "capabilities": [

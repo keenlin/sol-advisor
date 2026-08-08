@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "sol-advisor",
   "version": "0.6.0",
-  "description": "Codex-native architect orchestration: delegate implementation to GPT-5.6 Terra / High and require a fresh GPT-5.6 Sol / High review, with all verification and acceptance kept in the primary session.",
+  "description": "Codex-native architect orchestration: delegate implementation to opencode-go/deepseek-v4-flash / High and require a fresh GPT-5.6 Sol / High review, with all verification and acceptance kept in the primary session.",
   "author": {
     "name": "Daniel McAteer",
     "url": "https://github.com/DannyMac180"

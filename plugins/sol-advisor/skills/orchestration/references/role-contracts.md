@@ -12,11 +12,11 @@ complete steps 3-4 before accepting the result:
 
 1. Require the byte-exact template comparison to prove both installed files exactly
    match the shipped templates.
-2. Require native exposure of exactly `sol_advisor_terra_implementer` and
+2. Require native exposure of exactly `sol_advisor_implementer` and
    `sol_advisor_sol_reviewer`.
 3. Observe the selected role, model, and effort through public spawn/details metadata
    first, using the local runtime inspector only for omitted fields. Accept only
-   Terra / High for implementation and Sol / High for review.
+   opencode-go/deepseek-v4-flash / High for implementation and Sol / High for review.
 4. For the reviewer, capture actual sandbox policy and permission profile types.
 
 A missing, stale, unsafe, conflicting, unavailable, inconsistent, or unobservable
@@ -25,7 +25,7 @@ pinned by custom-agent TOML, so omit native per-spawn overrides.
 
 ## Shared implementation contract
 
-Every Terra prompt must contain all five sections:
+Every implementer prompt must contain all five sections:
 
 ~~~text
 OBJECTIVE
@@ -65,7 +65,7 @@ GAPS: <unfinished work, ambiguity, or none>
 
 The primary session must inspect the diff and rerun verification itself.
 
-## Terra / High - sole native implementation lane
+## Implementer / High - sole native implementation lane
 
 Use this lane for every delegated native implementation, from routine edits through
 complex, security-sensitive, context-heavy, and broad work.
@@ -73,11 +73,12 @@ complex, security-sensitive, context-heavy, and broad work.
 Spawn exactly:
 
 ~~~text
-agent_type: sol_advisor_terra_implementer
+agent_type: sol_advisor_implementer
 fork_turns: none
 ~~~
 
-The installed role pins GPT-5.6 Terra at high reasoning. Do not attach per-spawn model
+The installed role pins opencode-go/deepseek-v4-flash at high reasoning. Do not attach
+per-spawn model
 or reasoning fields. Require public-details-first runtime observation of the exact
 role and pin before accepting its report.
 
