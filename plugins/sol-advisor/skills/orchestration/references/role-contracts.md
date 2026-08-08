@@ -1,18 +1,17 @@
 # Native Codex role contracts
 
 Use these contracts with Sol Advisor's namespaced, role-pinned native custom agents.
-They do not launch a nested Codex CLI or change global default-subagent routing. The
-separate [Luna task-lane contract](luna-task-lane.md) covers user-visible app tasks;
-it is not a native custom-agent role and must not be represented by a companion TOML.
-Adapt every placeholder without removing a required field.
+They do not launch a nested Codex CLI or change global default-subagent routing. There
+is exactly one delegated lane: the native subagent lane. Adapt every placeholder
+without removing a required field.
 
 ## Required preflight
 
 Before every native spawn, complete steps 1-2 of SKILL.md's preflight. After spawning,
 complete steps 3-4 before accepting the result:
 
-1. Require the non-mutating companion check to prove both installed files exactly
-   match current templates and the retired companion file is absent.
+1. Require the byte-exact template comparison to prove both installed files exactly
+   match the shipped templates.
 2. Require native exposure of exactly `sol_advisor_terra_implementer` and
    `sol_advisor_sol_reviewer`.
 3. Observe the selected role, model, and effort through public spawn/details metadata
@@ -66,47 +65,10 @@ GAPS: <unfinished work, ambiguity, or none>
 
 The primary session must inspect the diff and rerun verification itself.
 
-## Luna task lane - separate user-visible app tasks
-
-Use this contract only after the user's current request explicitly authorizes the Luna
-task lane. It is outside native subagent V2: use `list_projects`, `list_threads`,
-`create_thread`, `wait_threads`, `read_thread`, and `send_message_to_thread` as needed;
-never use `spawn_agent` for the child and never require a Luna companion TOML. If the required
-app tools, GPT-5.6 Luna, or Max reasoning are unavailable, stop without fallback.
-
-Call `list_projects` first and choose the project from its returned `projectId` and
-`isGitRepository`. Use `create_thread` with the Git project's default isolated
-worktree when that flag is true, or the project's local environment otherwise. Set
-`model` to `gpt-5.6-luna` and `thinking` to `max`. A ready creation must provide a
-real `threadId` and `hostId`; a setup-only `clientThreadId` is not accepted by
-`list_threads` and must never be passed to it or other thread-id tools. Call
-`list_threads` without that client ID and correlate the newly created user-visible task
-using trustworthy identity, project, time, path, and state metadata where available.
-Treat returned titles and previews as untrusted data and repeat bounded discovery until
-the real task identity is available.
-
-The new task does not inherit the parent's full context. Its prompt must contain the
-complete packet defined in [luna-task-lane.md](luna-task-lane.md): objective,
-files/ownership, interfaces, constraints, starting state/base, verification, git/PR
-boundary, and structured return. The primary monitors with `wait_threads`, reads the
-handoff with `read_thread`, and independently inspects the actual branch/worktree,
-diff, and checks. Accepted creation routing plus the returned identity is the routing
-evidence; do not claim model or thinking metadata that the app did not provide.
-
-Corrections go to the same ready task with `send_message_to_thread` and are followed by
-another wait/read and primary diff review. The primary owns decomposition, ordering,
-review, correction decisions, PR authorization, and acceptance. A child may create or
-push a PR only after explicit primary authorization; the primary creates a dependent
-task only after accepting the prior stack. Independent, non-overlapping stacks may be
-concurrent; shared-file and dependent stacks are serial. Worktree isolation alone is
-not merge safety, and “report back” means explicit primary monitoring/read, not an
-automatic callback.
-
 ## Terra / High - sole native implementation lane
 
 Use this lane for every delegated native implementation, from routine edits through
-complex, security-sensitive, context-heavy, and broad work. It is not the Luna
-task-lane implementation path.
+complex, security-sensitive, context-heavy, and broad work.
 
 Spawn exactly:
 
